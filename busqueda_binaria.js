@@ -5,13 +5,13 @@ function busqueda_binaria(arr,elem){
     let mayor = arr.length - 1;
 
     while(menor <= mayor){
-        //En caso de que el rango no sea "par", se redondea hacia abajo
+        //En caso de que el rango sea "par", se redondea hacia abajo
         const medio = ((menor + mayor) - ((menor + mayor) % 2)) / 2;
-        let estimado = arr[medio]
+        const estimado = arr[medio];
 
-        if(estimado == elem)
-            return medio
-        else if (estimado > elem)
+        if(estimado === elem) return medio;
+        
+        if (estimado > elem)
             mayor = medio-1; // Descartamos el medio y su derecha.
         else
             menor = medio+1; // Descartamos el medio y su izquierda.
@@ -44,11 +44,58 @@ console.log(res);
         Entonces, el máximo son 8 pasos.
 
 
-    NOTA 1: La expresión para determinar el máxmo número de pasos 
+    NOTA 1: La búsqueda binaria recibe una lista ordenada de elementos.
+            Comienza comparando el elemento del medio con el buscado:
+                    ┌───┬───┬───┬───┬───┬───┬───┬───┬───┐
+                    │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │
+                    └───┴───┴───┴───┴───┴───┴───┴───┴───┘
+                                      ↑
+            Si es igual devuelve su indice, terminando la búsqueda.
+            
+            Si no era, compara si el buscado es mayor o menor:
+                Si es menor, se queda con el rango de la izquierda.
+                        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┐
+                        │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │
+                        └───┴───┴───┴───┴───┴───┴───┴───┴───┘
+                        └── Izquierda ──┘
+            
+                Si es mayor, se queda con el rango de la derecha.
+                        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┐
+                        │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │
+                        └───┴───┴───┴───┴───┴───┴───┴───┴───┘
+                                            └─── Derecha ───┘
+
+                En ambos casos, el elemento del medio se descarta 
+                porque ya fue comprobado.
+
+            Se vuelve a repetir el proceso con el nuevo rango.
+
+            De esta forma el algoritmo elimina la mitad de los elementos
+            en cada iteración, hasta encontrarlo o hasta que el rango
+            quede vacío (en ese caso devuelve null).
+
+            Este algoritmo tiene un costo de: O(log₂(n)).
+            
+    NOTA 2: Si el rango tiene una cantidad de elementos "par", no habría 
+            elemento medio exacto, sino dos centrales:
+                    ┌───┬───┬───┬───┬───┬───┬───┬───┐
+                    │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │
+                    └───┴───┴───┴───┴───┴───┴───┴───┘
+                                └ MEDIO ┘
+
+            La búsqueda binarias normalmente redondea hacia abajo el
+            índice del medio, por lo que el medio resulta ser el menor
+            de los dos centrales. 
+                    ┌───┬───┬───┬───┬───┬───┬───┬───┐
+                    │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │
+                    └───┴───┴───┴───┴───┴───┴───┴───┘
+                                  ↑
+
+    NOTA 3: La expresión para determinar el máximo número de pasos 
             es log₂(n), ya que en cada paso se divide el total de 
             la lista en 2 partes.
 
-    NOTA 2: Los "logaritmos" son la inversa que "los exponenciales".
+    NOTA 4: Los "logaritmos" son la inversa que "los exponenciales".
             log₂(128) = 7   ⟷   2⁷ = 128 
 
 */
